@@ -217,75 +217,172 @@ body {
 }
 
 /* Header with Glassmorphism */
-header {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+/* Modern Header */
+.header-modern {
     position: fixed;
-    width: 100%;
     top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05); /* More translucent */
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     z-index: 1000;
     transition: all 0.3s ease;
 }
 
-nav {
+.nav-modern {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 0.7rem 0; /* Reduced from 1rem */
 }
 
-.logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
-    transition: all 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.1);
-    text-shadow: 0 0 30px rgba(52, 152, 219, 1);
-}
-
-.nav-links {
+.nav-toggle {
     display: flex;
-    list-style: none;
-    gap: 2rem;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease;
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
+.hamburger-line {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 2px 0;
     transition: all 0.3s ease;
-    padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 2px;
+}
+
+.nav-toggle.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-toggle.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Side Navigation */
+.side-nav {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(26, 11, 46, 0.98), rgba(15, 23, 42, 0.98));
+    backdrop-filter: blur(30px);
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1001;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.side-nav.active {
+    right: 0;
+}
+
+.side-nav-content {
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-btn {
+    align-self: flex-end;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #9b59b6;
+    transform: rotate(90deg);
+}
+
+.side-nav-links {
+    list-style: none;
+    flex: 1;
+}
+
+.side-nav-links li {
+    margin: 1.5rem 0;
+}
+
+.side-nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: block;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
-.nav-links a::before {
+.side-nav-links a::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, #3498db, #9b59b6);
+    transition: left 0.3s ease;
+    z-index: -1;
 }
 
-.nav-links a:hover::before {
-    left: 100%;
+.side-nav-links a:hover::before {
+    left: 0;
 }
 
-.nav-links a:hover {
+.side-nav-links a:hover {
+    transform: translateX(10px);
+}
+
+.side-nav-footer {
+    text-align: center;
     color: #fff;
-    background: rgba(52, 152, 219, 0.3);
-    transform: translateY(-2px);
+}
+
+.side-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.social-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    /* Makes logos white */
+}
+
+
+
+/* Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Mobile Menu Toggle */
@@ -859,18 +956,38 @@ section {
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        padding: 1rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border-radius: 0 0 20px 20px;
+    display: none;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(30px);
+    flex-direction: column;
+    padding: 2rem 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+    z-index: 999;
+    gap: 1.5rem;
+    border-top: 2px solid rgba(147, 51, 234, 0.5);
+}
+    
+    .nav-links li {
+        margin: 0;
     }
+    
+    .nav-links a {
+    display: block;
+    padding: 1.2rem 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    border-radius: 15px;
+    background: rgba(147, 51, 234, 0.2);
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+}
 
     .nav-links.active {
         display: flex;
@@ -1067,24 +1184,35 @@ section {
     </div>
 </div>
     <!-- Header -->
-    <header>
+    <header class="header-modern">
         <div class="container">
-            <nav>
+            <nav class="nav-modern">
                 <div class="logo">RG</div>
-                <ul class="nav-links" id="navLinks">
+                <div class="nav-toggle" id="navToggle">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Side Navigation -->
+        <div class="side-nav" id="sideNav">
+            <div class="side-nav-content">
+                <div class="close-btn" id="closeBtn">&times;</div>
+                <ul class="side-nav-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#skills">Skills</a></li>
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#achievements">Awards</a></li>
                 </ul>
-                <div class="menu-toggle" id="menuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </nav>
+                
+            </div>
         </div>
+        
+        <!-- Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
     <!-- Hero Section -->
@@ -1396,10 +1524,18 @@ section {
             <p>Ready to collaborate on innovative AI/ML projects or discuss exciting opportunities in technology</p>
             
             <div class="social-links">
-                <a href="mailto:riagoyal125@gmail.com" class="social-link">📧</a>
-                <a href="https://linkedin.com/in/ria-goyal125" class="social-link" target="_blank">💼</a>
-                <a href="https://github.com/RIAgoyal12" class="social-link" target="_blank">🐱</a>
-                <a href="tel:+917536975370" class="social-link">📱</a>
+                <a href="mailto:riagoyal125@gmail.com" class="social-link">
+                    <img src="gmail.png" alt="Email" class="social-logo">
+                </a>
+                <a href="https://linkedin.com/in/ria-goyal125" class="social-link" target="_blank">
+                    <img src="linkedin.png" alt="LinkedIn" class="social-logo">
+                </a>
+                <a href="https://github.com/RIAgoyal12" class="social-link" target="_blank">
+                    <img src="github-sign.png" alt="GitHub" class="social-logo">
+                </a>
+                <a href="tel:+917536975370" class="social-link">
+                    <img src="circle.png" alt="Phone" class="social-logo">
+                </a>
             </div>
             
             <p>© 2024 Ria Goyal. Crafted with passion for innovation and excellence.</p>
@@ -1409,6 +1545,69 @@ section {
 
     <script>
         // Mobile menu toggle
+        // Close mobile menu when clicking outside
+        // Modern Navigation
+const navToggle = document.getElementById('navToggle');
+const sideNav = document.getElementById('sideNav');
+const closeBtn = document.getElementById('closeBtn');
+const navOverlay = document.getElementById('navOverlay');
+
+function openNav() {
+    sideNav.classList.add('active');
+    navOverlay.classList.add('active');
+    navToggle.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeNav() {
+    sideNav.classList.remove('active');
+    navOverlay.classList.remove('active');
+    navToggle.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+navToggle.addEventListener('click', openNav);
+closeBtn.addEventListener('click', closeNav);
+navOverlay.addEventListener('click', closeNav);
+
+// Close nav when clicking on links
+document.querySelectorAll('.side-nav-links a').forEach(link => {
+    link.addEventListener('click', closeNav);
+});
+
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Header background on scroll
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('.header-modern');
+    if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.08)'; /* More subtle */
+        header.style.backdropFilter = 'blur(20px)';
+    } else {
+        header.style.background = 'rgba(255, 255, 255, 0.05)';
+        header.style.backdropFilter = 'blur(15px)';
+    }
+});
+document.addEventListener('click', function(event) {
+    const isClickInsideNav = navLinks.contains(event.target);
+    const isClickOnToggle = menuToggle.contains(event.target);
+    
+    if (!isClickInsideNav && !isClickOnToggle && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+    }
+});
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
     
@@ -1426,7 +1625,7 @@ section {
                         behavior: 'smooth',
                         block: 'start'
                     });
-                    // Close mobile menu if open
+                    // Close mobile menu ixf open
                     navLinks.classList.remove('active');
                 }
             });
